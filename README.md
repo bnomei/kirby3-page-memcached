@@ -56,6 +56,7 @@ The [Redis Cachedriver Plugin](https://github.com/bnomei/kirby3-redis-cachedrive
 | host | `127.0.0.1` |  |
 | port | `6379` |  |
 | prefix | `page-memcached` |  |
+| expire | `0` | in minutes, 0 = infinite |
 
 ## Dependencies
 

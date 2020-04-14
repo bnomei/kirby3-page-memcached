@@ -17,9 +17,9 @@ class MemcachedPage extends Page
         }
         if (! self::$singleton) {
             $config = [
-                'host' => \option('bnomei.memcached-page.host'),
-                'port' => \option('bnomei.memcached-page.port'),
-                'prefix' => \option('bnomei.memcached-page.prefix'),
+                'host' => \option('bnomei.page-memcached.host'),
+                'port' => \option('bnomei.page-memcached.port'),
+                'prefix' => \option('bnomei.page-memcached.prefix'),
             ];
             foreach (array_keys($config) as $key) {
                 if (!is_string($config[$key]) && is_callable($config[$key])) {
@@ -74,7 +74,7 @@ class MemcachedPage extends Page
         return static::getSingleton()->set(
             $this->memcachedKey(),
             $data,
-            \option('bnomei.memcached-page.expire', 0)
+            \option('bnomei.page-memcached.expire', 0)
         );
     }
 

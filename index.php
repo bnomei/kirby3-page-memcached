@@ -11,5 +11,6 @@ Kirby::plugin('bnomei/page-memcached', [
         'host'    => '127.0.0.1',
         'port'    => 11211,
         'prefix'  => 'page-memcached',
+        'expire'  => 0,
     ],
 ]);
