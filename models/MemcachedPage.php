@@ -54,11 +54,11 @@ class MemcachedPage extends Page
         return $data;
     }
 
-    public function readContentCache(string $languageCode = null): array
+    public function readContentCache(string $languageCode = null): ?array
     {
         return static::getSingleton()->get(
             $this->memcachedKey(),
-            []
+            null
         );
     }
 
