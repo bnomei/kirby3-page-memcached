@@ -10,10 +10,13 @@ use Kirby\Cms\Page;
 class MemcachedPage extends Page
 {
     private static $singleton;
-    private static function getSingleton(): MemCached
+    private static function getSingleton(): ?MemCached
     {
         if (class_exists('Memcached') === false) {
-            throw new \Exception('The Memcached extension is not available.');
+            if (\option('bnomei.page-memcached.enforce')) {
+                throw new \Exception('Memcached Class is not available');
+            }
+            return null;
         }
         if (! self::$singleton) {
             $config = [
@@ -35,7 +38,12 @@ class MemcachedPage extends Page
         return self::$singleton;
     }
 
-    private function memcachedKey(): string
+    public function isContentMemcached(string $languageCode = null): bool
+    {
+        return $this->readContentCache($languageCode) !== null;
+    }
+
+    public function memcachedKey(): string
     {
         return $this->cacheId('memcached');
     }
@@ -54,9 +62,16 @@ class MemcachedPage extends Page
         return $data;
     }
 
+    /**
+     * @internal
+     */
     public function readContentCache(string $languageCode = null): ?array
     {
-        return static::getSingleton()->get(
+        $cache = static::getSingleton();
+        if (! $cache) {
+            return null;
+        }
+        return $cache->get(
             $this->memcachedKey(),
             null
         );
@@ -69,9 +84,16 @@ class MemcachedPage extends Page
             $this->writeContentCache($data, $languageCode);
     }
 
+    /**
+     * @internal
+     */
     public function writeContentCache(array $data, string $languageCode = null): bool
     {
-        return static::getSingleton()->set(
+        $cache = static::getSingleton();
+        if (! $cache) {
+            return true;
+        }
+        return $cache->set(
             $this->memcachedKey(),
             $data,
             \option('bnomei.page-memcached.expire', 0)
@@ -80,9 +102,12 @@ class MemcachedPage extends Page
 
     public function delete(bool $force = false): bool
     {
-        static::getSingleton()->remove(
-            $this->memcachedKey()
-        );
+        $cache = static::getSingleton();
+        if ($cache) {
+            $cache->remove(
+                $this->memcachedKey()
+            );
+        }
 
         return parent::delete($force);
     }

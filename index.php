@@ -12,5 +12,13 @@ Kirby::plugin('bnomei/page-memcached', [
         'port'    => 11211,
         'prefix'  => 'page-memcached',
         'expire'  => 0,
+        'enforce'  => true,
+    ],
+    'pageMethods' => [
+        'isMemcachedPage' => function () {
+            /** @var $this \Bnomei\MemcachedPage */
+            return is_a($this, \Bnomei\MemcachedPage::class) &&
+                $this->isContentMemcached(kirby()->languageCode());
+        },
     ],
 ]);

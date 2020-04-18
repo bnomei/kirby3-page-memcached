@@ -38,6 +38,13 @@ class ExamplePage extends \Bnomei\MemcachedPage
 
 > TIP: If you set Kirbys global debug option to `true` all cached Content-Files will be flushed.
 
+**site/templates/example.php**
+```php
+<?php
+/** @var ExamplePage $page */
+$checkIfContentFileIsMemcached = $page->isMemcachedPage(); // bool
+```
+
 ## Performance, Limitations and Alternatives
 
 How much and if you gain anything regarding performance depends on the hardware. But on most production servers reading data from RAM should be faster than reading files from SSD disks.
@@ -57,10 +64,15 @@ The [Redis Cachedriver Plugin](https://github.com/bnomei/kirby3-redis-cachedrive
 | port | `6379` |  |
 | prefix | `page-memcached` |  |
 | expire | `0` | in minutes, 0 = infinite |
+| enforce | `true` | will throw an Exception if Memcached class is missing. Turn off if you use php CLI without Memcached support. |
+
+## Known Issues
+
+PHP CLI rarely has Memcached enabled by default. In that case the plugin will read the page content file from disk.
 
 ## Dependencies
 
-- PHP Memcached extentsion and class
+- PHP Memcached extension and class
 
 ## Disclaimer
 
