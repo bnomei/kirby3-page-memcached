@@ -66,6 +66,8 @@ The [Redis Cachedriver Plugin](https://github.com/bnomei/kirby3-redis-cachedrive
 | expire | `0` | in minutes, 0 = infinite |
 | enforce | `true` | will throw an Exception if Memcached class is missing. Turn off if you use php CLI without Memcached support. |
 
+> TIP: To [connect to a unix socket](https://www.php.net/manual/en/memcached.addserver.php) use its id as value for `host` and set port to `0`
+
 ## Known Issues
 
 PHP CLI rarely has Memcached enabled by default. In that case the plugin will read the page content file from disk.
