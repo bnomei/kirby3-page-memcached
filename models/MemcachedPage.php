@@ -43,9 +43,12 @@ class MemcachedPage extends Page
         return $this->readContentCache($languageCode) !== null;
     }
 
-    public function memcachedKey(): string
+    public function memcachedKey(string $languageCode = null): string
     {
-        return $this->cacheId('memcached');
+        if (!$languageCode) {
+            $languageCode = kirby()->languages()->count() ? kirby()->language()->code() : '';
+        }
+        return $languageCode . '.' . $this->cacheId('memcached');
     }
 
     public function readContent(string $languageCode = null): array
@@ -72,7 +75,7 @@ class MemcachedPage extends Page
             return null;
         }
         return $cache->get(
-            $this->memcachedKey(),
+            $this->memcachedKey($languageCode),
             null
         );
     }
@@ -94,7 +97,7 @@ class MemcachedPage extends Page
             return true;
         }
         return $cache->set(
-            $this->memcachedKey(),
+            $this->memcachedKey($languageCode),
             $data,
             \option('bnomei.page-memcached.expire', 0)
         );
@@ -104,6 +107,11 @@ class MemcachedPage extends Page
     {
         $cache = static::getSingleton();
         if ($cache) {
+            foreach(kirby()->languages() as $language) {
+                $cache->remove(
+                    $this->memcachedKey($language->code())
+                );
+            }
             $cache->remove(
                 $this->memcachedKey()
             );
