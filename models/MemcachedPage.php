@@ -45,10 +45,15 @@ class MemcachedPage extends Page
 
     public function memcachedKey(string $languageCode = null): string
     {
+        $key = $this->cacheId('memcached');
         if (!$languageCode) {
-            $languageCode = kirby()->languages()->count() ? kirby()->language()->code() : '';
+            $languageCode = kirby()->languages()->count() ? kirby()->language()->code() : null;
+            if ($languageCode) {
+                $key = $languageCode . '.' . $key;
+            }
         }
-        return $languageCode . '.' . $this->cacheId('memcached');
+
+        return md5(kirby()->root()->index() . $key);
     }
 
     public function readContent(string $languageCode = null): array
