@@ -79,6 +79,16 @@ class MemcachedPage extends Page
         if (! $cache) {
             return null;
         }
+
+        $modified = function_exists('modified') ? \modified($this) : $this->modified();
+        $modifiedCache = $cache->get(
+            $this->memcachedKey($languageCode).'-modified',
+            null
+        );
+        if ($modifiedCache && intval($modifiedCache) < intval($modified)) {
+            return null;
+        }
+
         return $cache->get(
             $this->memcachedKey($languageCode),
             null
@@ -101,6 +111,11 @@ class MemcachedPage extends Page
         if (! $cache) {
             return true;
         }
+        $cache->set(
+            $this->memcachedKey($languageCode).'-modified',
+            function_exists('modified') ? \modified($this) : $this->modified(),
+            \option('bnomei.page-memcached.expire', 0)
+        );
         return $cache->set(
             $this->memcachedKey($languageCode),
             $data,
@@ -116,9 +131,15 @@ class MemcachedPage extends Page
                 $cache->remove(
                     $this->memcachedKey($language->code())
                 );
+                $cache->remove(
+                    $this->memcachedKey($language->code()).'-modified'
+                );
             }
             $cache->remove(
                 $this->memcachedKey()
+            );
+            $cache->remove(
+                $this->memcachedKey().'-modified'
             );
         }
 
