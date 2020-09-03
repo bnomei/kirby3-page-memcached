@@ -10,7 +10,7 @@ use Kirby\Cms\Page;
 class MemcachedPage extends Page
 {
     private static $singleton;
-    private static function getSingleton(): ?MemCached
+    public static function singleton(): ?MemCached
     {
         if (class_exists('Memcached') === false) {
             if (\option('bnomei.page-memcached.enforce')) {
@@ -75,7 +75,7 @@ class MemcachedPage extends Page
      */
     public function readContentCache(string $languageCode = null): ?array
     {
-        $cache = static::getSingleton();
+        $cache = static::singleton();
         if (! $cache) {
             return null;
         }
@@ -107,7 +107,7 @@ class MemcachedPage extends Page
      */
     public function writeContentCache(array $data, string $languageCode = null): bool
     {
-        $cache = static::getSingleton();
+        $cache = static::singleton();
         if (! $cache) {
             return true;
         }
@@ -125,7 +125,7 @@ class MemcachedPage extends Page
 
     public function delete(bool $force = false): bool
     {
-        $cache = static::getSingleton();
+        $cache = static::singleton();
         if ($cache) {
             foreach(kirby()->languages() as $language) {
                 $cache->remove(
