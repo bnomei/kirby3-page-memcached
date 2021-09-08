@@ -61,7 +61,7 @@ The [Redis Cachedriver Plugin](https://github.com/bnomei/kirby3-redis-cachedrive
 | bnomei.page-memcached.            | Default        | Description               |            
 |---------------------------|----------------|---------------------------|
 | host | `127.0.0.1` |  |
-| port | `6379` |  |
+| port | `11211` |  |
 | prefix | `page-memcached` |  |
 | expire | `0` | in minutes, 0 = infinite |
 | enforce | `true` | will throw an Exception if Memcached class is missing. Turn off if you use php CLI without Memcached support. |
