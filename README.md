@@ -1,3 +1,9 @@
+> &nbsp;
+> ## ARCHIVED
+> #### use [Kirby3 Boost](https://github.com/bnomei/kirby3-boost) instead
+> &nbsp;
+
+
 # Kirby 3 Page Memcached
 
 ![Release](https://flat.badgen.net/packagist/v/bnomei/kirby3-page-memcached?color=ae81ff)
